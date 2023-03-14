@@ -11,9 +11,10 @@ const app = express();
 const productManager = new ProductManager();
 
 
-app.get("/", async(req, res) => {
+app.get("/products", async(req, res) => {
     const productos = await productManager.consultarProductos();
-    res.send("¡Bienvenido a la página principal! "+productos);
+    const products2 = JSON.stringify(productos)
+    res.send("¡Bienvenido a la página principal! "+products2);
   });
 
 /**
@@ -21,11 +22,12 @@ app.get("/", async(req, res) => {
  *
  * Este endpoint nos permite retornar un usuario con un id especifico
  */
-app.get("/:idProducto", async (req, res) => {
-    const idProducto = req.params.idProducto;
+app.get("/products/:id", async (req, res) => {
+    const idProducto = req.params.id;
     console.log(`Recibida solicitud para producto con ID ${idProducto}`);
-    const producto = await productManager.getProductElementById(idProducto);
-    res.send("Recibida solicitud para producto con ID 1 "+producto);
+    const producto = await productManager.getProductElementById(parseInt(idProducto));
+    const producto2 = JSON.stringify(producto)
+    res.send("Recibida solicitud para producto con ID "+producto2);
   });
 
 /**
