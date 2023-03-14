@@ -4,12 +4,17 @@ class ProductManager {
     constructor() {
         this.path = "./src/productos.json";
     }
-    consultarProductos = async () => {
+
+    consultarProductos = async (limit = null) => { // Agregamos el parámetro limit con valor predeterminado de null
         try {
             if (fs.existsSync(this.path)) {
                 const data = await fs.promises.readFile(this.path, "utf-8");
                 const result = JSON.parse(data);
-                return result;
+                if (limit) { // Si se proporciona el parámetro de límite, devolvemos solo la cantidad especificada
+                    return result.slice(0, limit);
+                } else { // Si no se proporciona el parámetro de límite, devolvemos todos los productos
+                    return result;
+                }
             } else {
                 return [];
             }
@@ -17,8 +22,6 @@ class ProductManager {
             console.log(`error: ${err}`);
         }
     };
-
-
 
     getProductElementById = async (id) => {
         const products = await this.consultarProductos();
@@ -32,10 +35,6 @@ class ProductManager {
         }
 
     };
-
-
-
-
 }
 
 module.exports = ProductManager;
